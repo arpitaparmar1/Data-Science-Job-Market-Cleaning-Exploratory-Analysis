@@ -32,9 +32,9 @@ df['sql_yn'] = df['Job Description'].apply(lambda x: 1 if 'sql' in x.lower() els
 cols_to_drop = ['Job Description', 'Salary Estimate', 'Location','index','Headquarters']
 df = df.drop(columns=cols_to_drop)
 
-# cols_to_clean = ['Size', 'Type of ownership', 'Industry', 'Sector', 'Revenue', 'Competitors']
-# for col in cols_to_clean:
-#     df[col] = df[col].apply(lambda x: 'Unknown' if x == '-1' or x == -1 else x)
+cols_to_clean = ['Size', 'Type of ownership', 'Industry', 'Sector', 'Revenue', 'Competitors']
+for col in cols_to_clean:
+    df[col] = df[col].apply(lambda x: 'Unknown' if x == '-1' or x == -1 else x)
 
 df = df.replace(['Unknown / Non-Applicable', '-1', -1], np.nan)
 
@@ -43,27 +43,27 @@ print(df['Revenue'])
 
 print(df.head(10))
 
-#data visulation:
-# top_10_companies = df['Company Name'].value_counts().index[:10]
-# df_top = df[df['Company Name'].isin(top_10_companies)]
+#--data visulation---:
+top_10_companies = df['Company Name'].value_counts().index[:10]
+df_top = df[df['Company Name'].isin(top_10_companies)]
 
-# sns.barplot(x='Company Name', y='Rating', data=df_top)
-# plt.xticks(rotation=90,fontsize=10)
+sns.barplot(x='Company Name', y='Rating', data=df_top)
+plt.xticks(rotation=90,fontsize=10)
 
-# sns.histplot(df['Revenue'],kde=True)
-# plt.xticks(rotation=90,fontsize=10)
-# plt.tight_layout()
+sns.histplot(df['Revenue'],kde=True)
+plt.xticks(rotation=90,fontsize=10)
+plt.tight_layout()
 
-# top_5=df['Job Title'].value_counts().index[:5]
-# value=df[df['Job Title'].isin(top_5)]
-# sns.violinplot(x='Job Title',y='Avg_salary',data=value,palette='coolwarm')
-# plt.xticks(rotation=45,fontsize=7.5)
-# plt.tight_layout()
+top_5=df['Job Title'].value_counts().index[:5]
+value=df[df['Job Title'].isin(top_5)]
+sns.violinplot(x='Job Title',y='Avg_salary',data=value,palette='coolwarm')
+plt.xticks(rotation=45,fontsize=7.5)
+plt.tight_layout()
 
 skills=['python_yn','r_yn','spark_yn','aws_yn','excel_yn','sql_yn']
 df['total_skils']=df[skills].sum(axis=1)
 sector_skils=df.groupby('Job Title')['total_skils'].sum().sort_values(ascending=False).head(5)
-# plt.pie(sector_skils,autopct='%1.1f%%',startangle=140,colors=sns.color_palette('viridis'))
+plt.pie(sector_skils,autopct='%1.1f%%',startangle=140,colors=sns.color_palette('viridis'))
 plt.pie(
     sector_skils, 
     labels=sector_skils.index, 
@@ -76,3 +76,4 @@ plt.pie(
 plt.legend(bbox_to_anchor=(1.02, 1),loc='upper left')
 plt.tight_layout()
 plt.show()
+
